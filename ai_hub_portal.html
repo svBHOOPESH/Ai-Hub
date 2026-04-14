@@ -1,0 +1,361 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap');
+
+  :root {
+    --ai-bg: var(--color-background-tertiary);
+    --card-bg: var(--color-background-primary);
+    --text: var(--color-text-primary);
+    --muted: var(--color-text-secondary);
+    --border: var(--color-border-tertiary);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  .hub-wrap {
+    font-family: 'DM Sans', sans-serif;
+    padding: 2.5rem 1.5rem 3rem;
+    min-height: 100vh;
+  }
+
+  .hub-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+  }
+
+  .hub-eyebrow {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.75rem;
+  }
+
+  .hub-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 800;
+    color: var(--text);
+    line-height: 1.05;
+    margin-bottom: 0.75rem;
+  }
+
+  .hub-title span {
+    background: linear-gradient(135deg, #7F77DD 0%, #1D9E75 50%, #D85A30 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hub-sub {
+    font-size: 15px;
+    color: var(--muted);
+    max-width: 480px;
+    margin: 0 auto 1.5rem;
+    line-height: 1.6;
+  }
+
+  .search-bar {
+    max-width: 420px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  .search-bar input {
+    width: 100%;
+    padding: 0.65rem 1rem 0.65rem 2.6rem;
+    border-radius: 999px;
+    border: 0.5px solid var(--border);
+    background: var(--card-bg);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: var(--text);
+  }
+
+  .search-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    color: var(--muted);
+    pointer-events: none;
+  }
+
+  .filter-row {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 1.5rem 0;
+  }
+
+  .filter-btn {
+    padding: 5px 14px;
+    border-radius: 999px;
+    border: 0.5px solid var(--border);
+    background: transparent;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.18s;
+  }
+
+  .filter-btn:hover { color: var(--text); border-color: var(--color-border-secondary); }
+  .filter-btn.active {
+    background: var(--text);
+    color: var(--card-bg);
+    border-color: var(--text);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+    gap: 14px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .ai-card {
+    background: var(--card-bg);
+    border: 0.5px solid var(--border);
+    border-radius: 14px;
+    padding: 1.1rem 1rem 1rem;
+    cursor: pointer;
+    transition: transform 0.16s, border-color 0.16s, box-shadow 0.16s;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .ai-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.2s;
+    border-radius: 14px;
+  }
+
+  .ai-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--color-border-secondary);
+  }
+
+  .card-top {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .ai-logo {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+  }
+
+  .card-meta { flex: 1; min-width: 0; }
+
+  .ai-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .ai-maker {
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .ai-desc {
+    font-size: 12.5px;
+    color: var(--muted);
+    line-height: 1.55;
+  }
+
+  .card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 2px;
+  }
+
+  .tag {
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-weight: 500;
+  }
+
+  .launch-btn {
+    font-size: 11px;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    transition: color 0.15s;
+  }
+
+  .ai-card:hover .launch-btn { color: var(--text); }
+
+  .section-label {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    max-width: 1100px;
+    margin: 0 auto 10px;
+    padding: 0 2px;
+  }
+
+  .hidden { display: none !important; }
+
+  .empty-state {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--muted);
+    font-size: 14px;
+    grid-column: 1 / -1;
+  }
+</style>
+
+<div class="hub-wrap">
+  <div class="hub-header">
+    <div class="hub-eyebrow">All AI, one place</div>
+    <h1 class="hub-title">The <span>AI</span> Hub</h1>
+    <p class="hub-sub">Every major AI tool at your fingertips. Search, filter, launch.</p>
+    <div class="search-bar">
+      <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+      </svg>
+      <input type="text" id="search" placeholder="Search AI tools..." oninput="filterCards()" />
+    </div>
+  </div>
+
+  <div class="filter-row" id="filters">
+    <button class="filter-btn active" onclick="setFilter('all', this)">All</button>
+    <button class="filter-btn" onclick="setFilter('chat', this)">Chat</button>
+    <button class="filter-btn" onclick="setFilter('image', this)">Image</button>
+    <button class="filter-btn" onclick="setFilter('code', this)">Code</button>
+    <button class="filter-btn" onclick="setFilter('audio', this)">Audio</button>
+    <button class="filter-btn" onclick="setFilter('video', this)">Video</button>
+    <button class="filter-btn" onclick="setFilter('search', this)">Search</button>
+    <button class="filter-btn" onclick="setFilter('research', this)">Research</button>
+    <button class="filter-btn" onclick="setFilter('productivity', this)">Productivity</button>
+  </div>
+
+  <div class="grid" id="grid"></div>
+</div>
+
+<script>
+const AIS = [
+  { name: "ChatGPT", maker: "OpenAI", desc: "Conversational AI for writing, analysis, and coding.", tag: "chat", url: "https://chat.openai.com", color: "#10a37f", textColor: "#fff", emoji: "✦" },
+  { name: "Claude", maker: "Anthropic", desc: "Helpful, harmless, and honest AI assistant.", tag: "chat", url: "https://claude.ai", color: "#D97757", textColor: "#fff", emoji: "◆" },
+  { name: "Gemini", maker: "Google", desc: "Multimodal AI from Google DeepMind.", tag: "chat", url: "https://gemini.google.com", color: "#4285F4", textColor: "#fff", emoji: "✦" },
+  { name: "Copilot", maker: "Microsoft", desc: "AI integrated across Microsoft 365 suite.", tag: "productivity", url: "https://copilot.microsoft.com", color: "#0078d4", textColor: "#fff", emoji: "◈" },
+  { name: "Perplexity", maker: "Perplexity AI", desc: "AI-powered search with cited answers.", tag: "search", url: "https://perplexity.ai", color: "#20B2AA", textColor: "#fff", emoji: "◉" },
+  { name: "Grok", maker: "xAI", desc: "Real-time AI with access to X platform data.", tag: "chat", url: "https://grok.x.ai", color: "#1a1a1a", textColor: "#fff", emoji: "Ψ" },
+  { name: "Midjourney", maker: "Midjourney", desc: "High-quality AI image generation via Discord.", tag: "image", url: "https://midjourney.com", color: "#7C6AF7", textColor: "#fff", emoji: "◇" },
+  { name: "DALL·E 3", maker: "OpenAI", desc: "Photorealistic and artistic image generation.", tag: "image", url: "https://openai.com/dall-e-3", color: "#FF7C5C", textColor: "#fff", emoji: "◈" },
+  { name: "Stable Diffusion", maker: "Stability AI", desc: "Open-source image synthesis model.", tag: "image", url: "https://stability.ai", color: "#5C7CFF", textColor: "#fff", emoji: "✺" },
+  { name: "Adobe Firefly", maker: "Adobe", desc: "Generative AI built for creative workflows.", tag: "image", url: "https://firefly.adobe.com", color: "#FF0000", textColor: "#fff", emoji: "◆" },
+  { name: "Ideogram", maker: "Ideogram", desc: "AI image generation with precise text rendering.", tag: "image", url: "https://ideogram.ai", color: "#9B5DE5", textColor: "#fff", emoji: "Ι" },
+  { name: "Runway", maker: "Runway", desc: "AI-powered video generation and editing.", tag: "video", url: "https://runwayml.com", color: "#00CC88", textColor: "#fff", emoji: "▷" },
+  { name: "Sora", maker: "OpenAI", desc: "Text-to-video model for cinematic generation.", tag: "video", url: "https://sora.com", color: "#111111", textColor: "#fff", emoji: "◉" },
+  { name: "Pika", maker: "Pika Labs", desc: "Fast, creative AI video generation.", tag: "video", url: "https://pika.art", color: "#FF5733", textColor: "#fff", emoji: "▶" },
+  { name: "Kling AI", maker: "Kuaishou", desc: "Photorealistic video generation from text.", tag: "video", url: "https://klingai.com", color: "#1a1a2e", textColor: "#fff", emoji: "◑" },
+  { name: "ElevenLabs", maker: "ElevenLabs", desc: "Realistic AI voice synthesis and cloning.", tag: "audio", url: "https://elevenlabs.io", color: "#F5A623", textColor: "#fff", emoji: "♪" },
+  { name: "Suno", maker: "Suno", desc: "Full song generation from text prompts.", tag: "audio", url: "https://suno.com", color: "#6C5CE7", textColor: "#fff", emoji: "♫" },
+  { name: "Udio", maker: "Udio", desc: "Create professional music with AI.", tag: "audio", url: "https://udio.com", color: "#E84393", textColor: "#fff", emoji: "🎵" },
+  { name: "GitHub Copilot", maker: "GitHub", desc: "AI pair programmer for code completion.", tag: "code", url: "https://github.com/features/copilot", color: "#24292e", textColor: "#fff", emoji: "⌥" },
+  { name: "Cursor", maker: "Cursor", desc: "AI-first code editor built on VS Code.", tag: "code", url: "https://cursor.sh", color: "#1C1C1E", textColor: "#fff", emoji: "◫" },
+  { name: "Claude Code", maker: "Anthropic", desc: "Agentic coding assistant for the terminal.", tag: "code", url: "https://claude.ai/code", color: "#D97757", textColor: "#fff", emoji: "≺" },
+  { name: "Replit AI", maker: "Replit", desc: "Build and deploy apps with AI in browser.", tag: "code", url: "https://replit.com", color: "#F26207", textColor: "#fff", emoji: "⌘" },
+  { name: "Windsurf", maker: "Codeium", desc: "Agentic IDE with deep code awareness.", tag: "code", url: "https://codeium.com/windsurf", color: "#4ECDC4", textColor: "#fff", emoji: "◈" },
+  { name: "Notion AI", maker: "Notion", desc: "AI writing and summarization inside Notion.", tag: "productivity", url: "https://notion.so/product/ai", color: "#000000", textColor: "#fff", emoji: "N" },
+  { name: "Grammarly", maker: "Grammarly", desc: "AI writing assistant for grammar and tone.", tag: "productivity", url: "https://grammarly.com", color: "#15C39A", textColor: "#fff", emoji: "G" },
+  { name: "Otter.ai", maker: "Otter", desc: "AI meeting transcription and summaries.", tag: "productivity", url: "https://otter.ai", color: "#00A3FF", textColor: "#fff", emoji: "◉" },
+  { name: "Elicit", maker: "Elicit", desc: "AI research assistant for literature review.", tag: "research", url: "https://elicit.com", color: "#4A90D9", textColor: "#fff", emoji: "∑" },
+  { name: "Consensus", maker: "Consensus", desc: "Search scientific papers with AI synthesis.", tag: "research", url: "https://consensus.app", color: "#2D6BE4", textColor: "#fff", emoji: "◈" },
+  { name: "Gemini Deep Research", maker: "Google", desc: "In-depth research reports with Gemini.", tag: "research", url: "https://gemini.google.com", color: "#EA4335", textColor: "#fff", emoji: "◆" },
+  { name: "DeepSeek", maker: "DeepSeek", desc: "High-performance open-weight reasoning model.", tag: "chat", url: "https://chat.deepseek.com", color: "#4B6BFB", textColor: "#fff", emoji: "∞" },
+  { name: "Mistral", maker: "Mistral AI", desc: "Efficient open-source European AI models.", tag: "chat", url: "https://chat.mistral.ai", color: "#FF7000", textColor: "#fff", emoji: "M" },
+  { name: "Llama", maker: "Meta", desc: "Open-source foundation models from Meta.", tag: "chat", url: "https://llama.meta.com", color: "#0082FB", textColor: "#fff", emoji: "◍" },
+];
+
+let currentFilter = 'all';
+
+const tagColors = {
+  chat: { bg: '#EEEDFE', text: '#534AB7' },
+  image: { bg: '#FAECE7', text: '#993C1D' },
+  code: { bg: '#E1F5EE', text: '#0F6E56' },
+  audio: { bg: '#FAEEDA', text: '#854F0B' },
+  video: { bg: '#FBEAF0', text: '#993556' },
+  search: { bg: '#E6F1FB', text: '#185FA5' },
+  research: { bg: '#EAF3DE', text: '#3B6D11' },
+  productivity: { bg: '#F1EFE8', text: '#5F5E5A' },
+};
+
+function renderCards() {
+  const q = document.getElementById('search').value.toLowerCase();
+  const grid = document.getElementById('grid');
+  const visible = AIS.filter(ai => {
+    const matchFilter = currentFilter === 'all' || ai.tag === currentFilter;
+    const matchQ = !q || ai.name.toLowerCase().includes(q) || ai.maker.toLowerCase().includes(q) || ai.desc.toLowerCase().includes(q) || ai.tag.includes(q);
+    return matchFilter && matchQ;
+  });
+
+  if (!visible.length) {
+    grid.innerHTML = '<div class="empty-state">No AI tools found. Try a different search or filter.</div>';
+    return;
+  }
+
+  grid.innerHTML = visible.map(ai => {
+    const tc = tagColors[ai.tag] || { bg: '#eee', text: '#333' };
+    return `<a class="ai-card" href="${ai.url}" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="ai-logo" style="background:${ai.color};color:${ai.textColor}">${ai.emoji}</div>
+        <div class="card-meta">
+          <div class="ai-name">${ai.name}</div>
+          <div class="ai-maker">${ai.maker}</div>
+        </div>
+      </div>
+      <div class="ai-desc">${ai.desc}</div>
+      <div class="card-footer">
+        <span class="tag" style="background:${tc.bg};color:${tc.text}">${ai.tag}</span>
+        <span class="launch-btn">Open ↗</span>
+      </div>
+    </a>`;
+  }).join('');
+}
+
+function filterCards() { renderCards(); }
+function setFilter(f, btn) {
+  currentFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderCards();
+}
+
+renderCards();
+</script>
